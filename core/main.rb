@@ -7,9 +7,11 @@
 
 require 'socket'
 require 'thread'
-require 'config'
 require 'rubygems'
 require 'json'
+
+require 'core/config'
+require 'handlers/snmp-trap-handler/snmp-trap-handler'
 
 Thread.abort_on_exception = true
 
@@ -55,23 +57,25 @@ class CoreListener
 		end
 	end
 
-	def parse_event(event)
-		(header, type, name, ser_info) = event.split("|", 4)
-		if header.nil? or type.nil? or name.nil? or ser_info.nil?
-			puts "Malformed event: #{event}"
-		else
-			begin
-				evinfo = JSON.parse(ser_info.chomp).to_s
-			rescue => e
-				puts "JSON parse error: #{e.message}"
-			end
-
-			route_event(header, type, name, evinfo)
+	def parse_event(rawevent)
+		begin
+			event = JSON.parse(rawevent)
+		rescue => e
+			puts "Malformed event!  JSON parse error: #{e.message}"
 		end
+
+		route_event(event)
 	end
 
-	def route_event(header, type, name, evinfo)
-		puts "H(#{header}) T(#{type}) N(#{name}):\n#{evinfo}"
+	def route_event(event)
+		case event['type']
+		when "snmptrap"
+			SNMPTrapHandler.new(event)
+		else
+			puts "GOT UNHANDLED EVENT:"
+			puts event
+		end
+				
 	end
 end
 

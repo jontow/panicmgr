@@ -4,8 +4,8 @@
 #
 
 class SNMPTrapHandler
-	def initialize(name, evinfo)
-		puts "TRAP -- #{name}:"
-		puts evinfo
+	def initialize(event)
+		puts "TRAP -- #{event['name']}:"
+		puts event['info']
 	end
 end
