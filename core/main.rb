@@ -8,6 +8,8 @@
 require 'socket'
 require 'thread'
 require 'config'
+require 'rubygems'
+require 'json'
 
 Thread.abort_on_exception = true
 
@@ -26,8 +28,9 @@ class CoreListener
 		puts "Listening on #{@cfg.listenhost}:#{@cfg.listenport}"
 		socket = TCPServer.new(@cfg.listenhost, @cfg.listenport)
 		loop do
-			@sockets << socket.accept
-			puts "New connection"
+			client = socket.accept
+			@sockets << client
+			puts "New connection from #{client.peeraddr[2]}"
 		end
 	end
 
@@ -40,17 +43,35 @@ class CoreListener
 							input = s.gets
 							if input.nil?
 								# dead session
-								puts "Dead connection"
+								puts "Dead connection (#{s.peeraddr[2]})"
 								@sockets.delete s
 								next
 							end
-							input.chomp!
-							puts input
+							parse_event(input)
 						end
 					end
 				end
 			end
 		end
+	end
+
+	def parse_event(event)
+		(header, type, name, ser_info) = event.split("|", 4)
+		if header.nil? or type.nil? or name.nil? or ser_info.nil?
+			puts "Malformed event: #{event}"
+		else
+			begin
+				evinfo = JSON.parse(ser_info.chomp).to_s
+			rescue => e
+				puts "JSON parse error: #{e.message}"
+			end
+
+			route_event(header, type, name, evinfo)
+		end
+	end
+
+	def route_event(header, type, name, evinfo)
+		puts "H(#{header}) T(#{type}) N(#{name}):\n#{evinfo}"
 	end
 end
 

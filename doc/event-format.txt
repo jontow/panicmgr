@@ -20,6 +20,6 @@ The trap as it came in:
 
 The event as sent along:
 
-	EVENT|snmptrap|IF-MIB::linkDown|"\"SNMPv2-MIB::sysUpTime.0 :: 208 days, 02:36:17.65\\nSNMPv2-MIB::snmpTrapOID.0 :: 1.3.6.1.6.3.1.1.5.3\\nIF-MIB::ifIndex.837 :: 837\\nIF-MIB::ifAdminStatus.837 :: 2\\nIF-MIB::ifOperStatus.837 :: 2\\nIF-MIB::ifName.837 :: ge-0/1/6.0\\n\""
+	EVENT|snmptrap|IF-MIB::linkDown|[\"SNMPv2-MIB::sysUpTime.0 :: 208 days, 02:36:17.65\\nSNMPv2-MIB::snmpTrapOID.0 :: 1.3.6.1.6.3.1.1.5.3\\nIF-MIB::ifIndex.837 :: 837\\nIF-MIB::ifAdminStatus.837 :: 2\\nIF-MIB::ifOperStatus.837 :: 2\\nIF-MIB::ifName.837 :: ge-0/1/6.0\\n\"]
 
 

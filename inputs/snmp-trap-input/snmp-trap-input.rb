@@ -5,6 +5,7 @@
 
 require 'rubygems'
 require 'snmp'
+require 'json'
 require 'reverse-resolve'
 require 'config'
 
@@ -56,8 +57,18 @@ end
 		@trappers << SNMP::TrapListener.new(:Host => '0.0.0.0', :Port => pc['port'], :Community => pc['community']) do |manager|
 			manager.on_trap_default do |trap|
 				event = "(TRAPPER:#{pc['port']}) #{@mib.backwards(trap.trap_oid.to_s)} received from #{trap.source_ip}"
+				trapinfo = ""
+				trap.each_varbind do |vb|
+					trapinfo += "#{@mib.backwards(vb.name.to_s)} :: #{vb.value.to_s}\n"
+				end
+
 				puts event
-				@coreq << event
+
+				header = "EVENT"
+				type = "snmptrap"
+				name = @mib.backwards(trap.trap_oid.to_s)
+				cookedevent = "EVENT|#{type}|#{name}|[#{trapinfo.to_json}]"
+				@coreq << cookedevent
 			end
 		end
 	end
