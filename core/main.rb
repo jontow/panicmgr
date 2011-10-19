@@ -60,11 +60,11 @@ class CoreListener
 	def parse_event(rawevent)
 		begin
 			event = JSON.parse(rawevent)
+			route_event(event)
 		rescue => e
 			puts "Malformed event!  JSON parse error: #{e.message}"
+			p rawevent
 		end
-
-		route_event(event)
 	end
 
 	def route_event(event)
