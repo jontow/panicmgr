@@ -1,0 +1,7 @@
+This is a placeholder.
+
+Examples of actions:
+* email
+* sms (via email, likely)
+* voice call (freeswitch event socket and some pre-recorded files?)
+* run a script (custom defined per event?)
