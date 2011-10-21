@@ -6,26 +6,22 @@
 require 'rubygems'
 require 'snmp'
 require 'json'
-require 'reverse-resolve'
-require 'config'
+require File.dirname(__FILE__) + '/reverse-resolve'
+require File.dirname(__FILE__) + '/config'
 
 Thread.abort_on_exception = true
+@cfg = SNMPTrapInputConfig.new
 
 @mib = SNMP::MIB.new()
 
-@mib.load_module("IF-MIB")
-@mib.load_module("IP-MIB")
-@mib.load_module("SNMPv2-MIB")
-@mib.load_module("DS1-MIB")
-@mib.load_module("BGP4-MIB")
-@mib.load_module("OSPF-MIB")
-@mib.load_module("OSPF-TRAP-MIB")
+@cfg.loadmibs.each do |mibfile|
+	puts "Loading #{mibfile}"
+	@mib.load_module(mibfile)
+end
 
 #Dir['mib/OCCAM-*.yaml'].each do |mibfile|
 #	@mib.load_module(File.basename(mibfile, '.yaml'), File.dirname(mibfile))
 #end
-
-@cfg = SNMPTrapInputConfig.new
 
 @uplink = STDOUT
 @trappers = []

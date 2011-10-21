@@ -10,8 +10,8 @@ require 'thread'
 require 'rubygems'
 require 'json'
 
-require 'core/config'
-require 'handlers/snmp-trap-handler/snmp-trap-handler'
+require File.dirname(__FILE__) + '/config'
+require File.dirname(__FILE__) + '/../handlers/snmp-trap-handler/snmp-trap-handler'
 
 Thread.abort_on_exception = true
 
