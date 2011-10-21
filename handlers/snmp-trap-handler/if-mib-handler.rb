@@ -7,13 +7,13 @@
 module IFMIB
 	def self.linkdown(evinfo)
 		if evinfo =~ /IF-MIB::ifName\.[0-9]+\ ::\ (.*)/
-			return "linkDown: #{$1}"
+			return "linkfail: #{$1}"
 		end
 	end
 
 	def self.linkup(evinfo)
 		if evinfo =~ /IF-MIB::ifName\.[0-9]+\ ::\ (.*)/
-			return "linkUp: #{$1}"
+			return "linkfail: #{$1}"
 		end
 	end
 end
